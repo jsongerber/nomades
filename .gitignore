@@ -1,0 +1,71 @@
+npm-debug.log
+.sass-cache/
+docs/.sass-cache
+docs/.jekyll-metadata
+bower_components/
+node_modules/
+yarn.lock
+!wp-content/mu-plugins/
+/vendor/
+*.map
+
+.htaccess
+wp-content/themes/jason-child/caches/cache-*
+
+*.swp
+*.log
+
+*.log
+wp-config.php
+wp-config.php
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/wp-cache-config.php
+wp-content/ai1wm-backups
+wp-content/plugins/all-in-one-wp-migration/storage
+
+.htaccess
+license.txt
+readme.html
+sitemap.xml
+sitemap.xml.gz
+
+*.DS_Store
+.AppleDouble
+.LSOverride
+.smbdelete*
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.well-known
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+wp-content/wflogs/
+/presse*
+
+.infomaniak-maintenance.html
+/old 
+/google*
