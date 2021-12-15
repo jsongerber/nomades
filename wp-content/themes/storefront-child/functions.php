@@ -30,14 +30,21 @@ function my_load_scripts($hook) {
 
 }
 
-remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+// Add WooCommerce Supoprt and WooCommerce Gallery support
+add_action( 'after_setup_theme', 'nomades_add_woocommerce_support' );
+function nomades_add_woocommerce_support() {
+	add_theme_support( 'woocommerce' , array(
+		'thumbnail_image_width' => 50,
+		'gallery_thumbnail_image_width' => 100,
+		'single_image_width' => 500,
+	));
 
-add_filter('woocommerce_product_add_to_cart_text', 'change_text');
-function change_text($text) {
-	$text = 'Acheter';
-
-	return $text;
+	add_theme_support( 'wc-product-gallery-zoom' );
+	add_theme_support( 'wc-product-gallery-lightbox' );
+	add_theme_support( 'wc-product-gallery-slider' );
 }
+
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
 
 add_action( 'widgets_init', 'nomades_widgets_init' );
 function nomades_widgets_init() {
@@ -53,16 +60,7 @@ function nomades_widgets_init() {
 
 }
 
-// Add WooCommerce Supoprt and WooCommerce Gallery support
-add_action( 'after_setup_theme', 'nomades_add_woocommerce_support' );
-function nomades_add_woocommerce_support() {
-	add_theme_support( 'woocommerce' );
-	add_theme_support( 'wc-product-gallery-zoom' );
-	add_theme_support( 'wc-product-gallery-lightbox' );
-	add_theme_support( 'wc-product-gallery-slider' );
-}
-
-// Hide other delivery methods if free shipping is available
+// Si la livraison gratuite est disponible, cacher les autres méthodes de livraison
 add_filter( 'woocommerce_package_rates', 'nomades_hide_shipping_when_free_is_available', 100 );
 function nomades_hide_shipping_when_free_is_available( $rates ) {
 	$free = array();
@@ -76,7 +74,7 @@ function nomades_hide_shipping_when_free_is_available( $rates ) {
 	return ! empty( $free ) ? $free : $rates;
 }
 
-// Remove additionnal info tab
+// Cacher l'onglet "Informations complémentaires"
 add_filter( 'woocommerce_product_tabs', 'remove_product_tabs', 99 );
 function remove_product_tabs( $tabs ) {
 	unset( $tabs['additional_information'] ); 
@@ -84,29 +82,29 @@ function remove_product_tabs( $tabs ) {
 	return $tabs;
 }
 
-// Replace "Out of stock" label
+// Remplacer le texte "Rupture de stock"
 add_filter('woocommerce_get_availability', 'nomades_availability_label');
 function nomades_availability_label($availability) {
 	$availability['availability'] = str_replace('Rupture de stock', 'Vendu', $availability['availability']);
 	return $availability;
 }
 
-// Set a minimum order amount for checkout
+// Empêcher l'achat en dessous d'un certain montant
 add_action( 'woocommerce_checkout_process', 'wc_minimum_order_amount' );
 add_action( 'woocommerce_before_cart' , 'wc_minimum_order_amount' );
 function wc_minimum_order_amount() {
-    $minimum = 50;
+	$minimum = 50;
 
-    if ( WC()->cart->total < $minimum ) {
+	if ( WC()->cart->total < $minimum ) {
 
-        wc_print_notice( 
-            sprintf( 'Votre total est de %s — vous devez avoir un minimum de %s pour commander' , 
-                wc_price( WC()->cart->total ), 
-                wc_price( $minimum )
-            ), 'error' 
-        );
+		wc_print_notice( 
+			sprintf( 'Votre total est de %s — vous devez avoir un minimum de %s pour commander' , 
+				wc_price( WC()->cart->total ), 
+				wc_price( $minimum )
+			), 'error' 
+		);
 
-    }
+	}
 }
 
 // Enlever le fil d'ariane
