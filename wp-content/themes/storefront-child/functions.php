@@ -1,14 +1,5 @@
 <?php
 
-remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
-
-add_filter('woocommerce_product_add_to_cart_text', 'change_text');
-function change_text($text) {
-	$text = 'Acheter';
-
-	return $text;
-}
-
 add_action('wp_enqueue_scripts', 'my_load_scripts');
 function my_load_scripts($hook) {
  
@@ -39,6 +30,29 @@ function my_load_scripts($hook) {
 
 }
 
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+
+add_filter('woocommerce_product_add_to_cart_text', 'change_text');
+function change_text($text) {
+	$text = 'Acheter';
+
+	return $text;
+}
+
+add_action( 'widgets_init', 'nomades_widgets_init' );
+function nomades_widgets_init() {
+
+	register_sidebar( array(
+		'name'          => 'Sidebar',
+		'id'            => 'sidebar',
+		'before_widget' => '<div>',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => '</h2>',
+	) );
+
+}
+
 // Add WooCommerce Supoprt and WooCommerce Gallery support
 add_action( 'after_setup_theme', 'nomades_add_woocommerce_support' );
 function nomades_add_woocommerce_support() {
@@ -47,9 +61,6 @@ function nomades_add_woocommerce_support() {
 	add_theme_support( 'wc-product-gallery-lightbox' );
 	add_theme_support( 'wc-product-gallery-slider' );
 }
-
-// Remove meta on product price
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
 
 // Hide other delivery methods if free shipping is available
 add_filter( 'woocommerce_package_rates', 'nomades_hide_shipping_when_free_is_available', 100 );
@@ -96,4 +107,25 @@ function wc_minimum_order_amount() {
         );
 
     }
+}
+
+// Enlever le fil d'ariane
+remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0);
+
+// Changer le texte "Choix des options" du bouton des produits variables
+add_filter('woocommerce_product_add_to_cart_text', 'nomades_change_add_to_cart_text', 10);
+function nomades_change_add_to_cart_text($text) {
+	global $product;
+	
+	if ($product instanceof WC_Product && $product->is_type('variable')) {
+		
+		if ($product->is_purchasable()) {
+			$text = 'Ajouter au panier';
+		} else {
+			$text = 'Découvrir le produit';
+		}
+
+	}
+
+	return $text;
 }
